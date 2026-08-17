@@ -14,7 +14,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
 
       - name: Install system dependencies
         run: |
@@ -24,11 +24,10 @@ jobs:
             pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev \
             cmake libffi-dev libssl-dev
 
-      - name: Install Buildozer with compatible dependencies
+      - name: Install Buildozer
         run: |
-            pip install --upgrade "pip>=23.0,<24.1"
-            pip install "buildozer>=1.5.0" "cython>=0.29.36" "setuptools>=65.0"
-            pip install "https://github.com/kivy/python-for-android/archive/refs/heads/develop.zip"
+          pip install --upgrade pip
+          pip install buildozer==1.5.0 cython==0.29.36
 
       - name: Build with Buildozer
         run: |
