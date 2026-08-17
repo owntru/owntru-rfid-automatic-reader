@@ -26,9 +26,9 @@ jobs:
 
       - name: Install Buildozer with compatible dependencies
         run: |
-          pip install --upgrade "pip>=23.0,<24.1"
-          pip install "buildozer>=1.5.0" "cython>=0.29.36" "setuptools>=65.0"
-          pip install --upgrade "pythonforandroid>=0.52.0"
+            pip install --upgrade "pip>=23.0,<24.1"
+            pip install "buildozer>=1.5.0" "cython>=0.29.36" "setuptools>=65.0"
+            pip install "https://github.com/kivy/python-for-android/archive/refs/heads/develop.zip"
 
       - name: Build with Buildozer
         run: |
