@@ -1,17 +1,3 @@
-"""
-NFC Card Scanner -> Sends card UID to your laptop
---------------------------------------------------
-A minimal Kivy app for Android that:
-1. Listens for NFC tag/card scans while the app is open (foreground dispatch)
-2. Reads the card's UID
-3. Sends it via HTTP POST to your laptop's nfc_listener.py
-
-This version includes an on-screen debug log so you can see exactly what's
-happening at every step, directly on the phone screen.
-
-Build this into an APK with Buildozer (see buildozer.spec + build instructions).
-"""
-
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
@@ -25,13 +11,14 @@ import json
 import time
 import traceback
 
-from jnius import autoclass
+from jnius import autoclass, cast
 from android import activity
 
 PythonActivity = autoclass('org.kivy.android.PythonActivity')
 NfcAdapter = autoclass('android.nfc.NfcAdapter')
 PendingIntent = autoclass('android.app.PendingIntent')
 Intent = autoclass('android.content.Intent')
+Tag = autoclass('android.nfc.Tag')
 
 DEFAULT_URL = "http://192.168.1.42:5005"  # <-- change to your laptop's IP
 
@@ -122,10 +109,11 @@ class NFCApp(App):
             if action in (NfcAdapter.ACTION_TAG_DISCOVERED,
                           NfcAdapter.ACTION_TECH_DISCOVERED,
                           NfcAdapter.ACTION_NDEF_DISCOVERED):
-                tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
-                if tag is None:
+                tag_parcelable = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+                if tag_parcelable is None:
                     self.log("Tag object was None.")
                     return
+                tag = cast(Tag, tag_parcelable)
                 uid_bytes = tag.getId()
                 uid_hex = ''.join('%02X' % (b & 0xFF) for b in uid_bytes)
                 self.log(f"Card UID read: {uid_hex}")
