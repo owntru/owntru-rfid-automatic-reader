@@ -14,8 +14,9 @@ jobs:
       - name: Build APK using official Kivy Docker image
         run: |
           docker run --rm \
+            --entrypoint sh \
             -v ${{ github.workspace }}:/home/user/hostcwd \
-            kivy/buildozer sh -c "yes | sdkmanager --licenses > /dev/null; buildozer android debug"
+            kivy/buildozer -c "yes | sdkmanager --licenses > /dev/null; buildozer android debug"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
