@@ -15,9 +15,9 @@ jobs:
         run: |
           docker run --rm \
             --entrypoint sh \
+            -e PIP_CONSTRAINT=/home/user/hostcwd/constraints.txt \
             -v ${{ github.workspace }}:/home/user/hostcwd \
             kivy/buildozer -c "yes | buildozer android debug"
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
